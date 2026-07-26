@@ -51,7 +51,7 @@ func ValidateJWTToken(signedToken string) (*Claims, error) {
     // Parse the token
     token, err := jwt.ParseWithClaims(signedToken, &Claims{}, func(token *jwt.Token) (interface{}, error) {
         // Ensure that the signing method is what you expect
-        if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+        if token.Method != jwt.SigningMethodHS256 {
             errorMsg := fmt.Sprintf("unexpected signing method: %v", token.Header["alg"])
             return nil, errors.New(errorMsg)
         }
