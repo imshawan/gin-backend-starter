@@ -33,7 +33,7 @@ func RegisterUser(ctx *gin.Context) {
 	usersCollection := database.Mongo.Collection("users")
 
 	var existingUser models.User
-	if err := usersCollection.FindOne(context.TODO(), bson.M{"email": userReq.Email}).Decode(&existingUser); err == nil {
+	if err := usersCollection.FindOne(context.TODO(), bson.M{"email": userReq.Email}).Decode(&existingUser); err != nil && err.Error() != "not found" {
 		helpers.FormatAPIResponse(ctx, http.StatusConflict, errors.New("user with this email already exists"))
 		return
 	}
